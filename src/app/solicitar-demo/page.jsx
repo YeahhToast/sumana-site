@@ -1,38 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import Head from "next/head";
-import { useRouter } from 'next/navigation';
 
 export default function SolicitarDemo() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const formData = new FormData(e.target);
-
-    try {
-      await fetch('https://script.google.com/macros/s/AKfycbz2Q_aFXfhrqnBCusqhn8u9r8oId5Byo5I5ptsANyvXYxjPcc6wRFDtCBQtXwx0An_ukg/exec', {
-        method: 'POST',
-        mode: 'no-cors', // Prevent fetch from blocking due to CORS
-        body: formData,
-      });
-
-      // Wait 1–2 seconds to ensure Apps Script finishes
-      setTimeout(() => {
-        router.push('/gracias');
-      }, 1200);
-
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Hubo un error al enviar el formulario.");
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    // Listen for the iframe load event
+    const iframe = document.getElementById('hidden-iframe');
+    if (iframe) {
+      iframe.onload = () => {
+        // Delay to allow processing, then redirect
+        setTimeout(() => {
+          window.location.href = '/gracias';
+        }, 1000);
+      };
     }
-  };
+  }, []);
 
   return (
     <>
@@ -47,14 +30,22 @@ export default function SolicitarDemo() {
           Descubre cómo Sumana puede transformar tu proceso de reclutamiento con entrevistas automáticas y análisis impulsado por IA.
         </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {/* Hidden iframe to submit form without page reload */}
+        <iframe name="hidden-iframe" id="hidden-iframe" style={{ display: 'none' }}></iframe>
+
+        <form
+          action="https://script.google.com/macros/s/AKfycbz2Q_aFXfhrqnBCusqhn8u9r8oId5Byo5I5ptsANyvXYxjPcc6wRFDtCBQtXwx0An_ukg/exec"
+          method="POST"
+          target="hidden-iframe"
+          className="flex flex-col gap-4"
+        >
           <input type="text" name="nombre" placeholder="Nombre completo" required className="p-3 rounded border border-gray-300" />
           <input type="email" name="email" placeholder="Correo electrónico" required className="p-3 rounded border border-gray-300" />
           <input type="text" name="empresa" placeholder="Nombre de la empresa" required className="p-3 rounded border border-gray-300" />
           <textarea name="mensaje" rows={4} placeholder="Cuéntanos más sobre tus necesidades..." className="p-3 rounded border border-gray-300"></textarea>
 
-          <button type="submit" disabled={loading} className="bg-[#F76C5E] text-white font-semibold py-3 rounded hover:bg-[#e55a4e]">
-            {loading ? "Enviando..." : "Enviar solicitud"}
+          <button type="submit" className="bg-[#F76C5E] text-white font-semibold py-3 rounded hover:bg-[#e55a4e]">
+            Enviar solicitud
           </button>
         </form>
       </main>
