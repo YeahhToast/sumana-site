@@ -17,13 +17,18 @@ export default function SolicitarDemo() {
     try {
       await fetch('https://script.google.com/macros/s/AKfycbz2Q_aFXfhrqnBCusqhn8u9r8oId5Byo5I5ptsANyvXYxjPcc6wRFDtCBQtXwx0An_ukg/exec', {
         method: 'POST',
+        mode: 'no-cors', // Prevent fetch from blocking due to CORS
         body: formData,
       });
 
-      router.push('/gracias');
+      // Wait 1–2 seconds to ensure Apps Script finishes
+      setTimeout(() => {
+        router.push('/gracias');
+      }, 1200);
+
     } catch (err) {
+      console.error("Error:", err);
       alert("Hubo un error al enviar el formulario.");
-      console.error(err);
     } finally {
       setLoading(false);
     }
