@@ -7,11 +7,18 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Sumana",
   description: "IA para entrevistas inteligentes",
+  icons: {
+    icon: "/sumanalogotab.png",
+  },
 };
+
 
 export default function RootLayout({ children }) {
   return (
     <html lang="es" className="bg-[#FDF8F3]">
+      <head>
+        <link rel="icon" href="/sumanalogotab.png" type="image/png" />
+      </head>
       <body className={`${inter.className} bg-[#FDF8F3] text-[#1F2937] min-h-screen flex flex-col`}>
         <header className="fixed top-0 w-full bg-[#FDF8F3] shadow-md py-2 px-10 flex justify-between items-center z-50">
           <Link href="/">
