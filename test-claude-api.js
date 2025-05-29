@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // test-claude-api.js
 // No import needed for fetch in Node.js 18+
 
